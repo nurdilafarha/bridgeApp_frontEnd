@@ -24,14 +24,6 @@ const Sidebar = () => {
               <ListItemText primary="Posting" sx={{ display: {xs: "none", sm: "block"}}}/>
             </ListItemButton>
           </ListItem>
-          <ListItem >
-            <ListItemButton component="a" href="/catatan">
-              <ListItemIcon>
-                <Description/>
-              </ListItemIcon>
-              <ListItemText primary="Catatan" sx={{ display: {xs: "none", sm: "block"}}} />
-            </ListItemButton>
-          </ListItem>
       </List>
     </div>
   )

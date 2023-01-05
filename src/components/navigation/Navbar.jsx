@@ -1,7 +1,11 @@
 import { AppBar, Avatar, Badge, Box, IconButton, InputBase, Menu, MenuItem, styled, Toolbar, Typography } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Notifications } from '@mui/icons-material';
 import ForumIcon from '@mui/icons-material/Forum';
+import { AuthContext } from '../../context/AuthContext';
+import "./Navbar.css"
+import { Link } from 'react-router-dom';
+import { logoutCall } from '../../apiCalls';
 
 const StyledToolbar = styled(Toolbar)({
     display: "flex",
@@ -24,35 +28,6 @@ const Icons = styled(Box)(({ theme }) => ({
     }
 }));
 
-function stringToColor(string) {
-    let hash = 0;
-    let i;
-  
-    /* eslint-disable no-bitwise */
-    for (i = 0; i < string.length; i += 1) {
-      hash = string.charCodeAt(i) + ((hash << 5) - hash);
-    }
-  
-    let color = '#';
-  
-    for (i = 0; i < 3; i += 1) {
-      const value = (hash >> (i * 8)) & 0xff;
-      color += `00${value.toString(16)}`.slice(-2);
-    }
-    /* eslint-enable no-bitwise */
-  
-    return color;
-}
-
-function stringAvatar(name) {
-    return {
-      sx: {
-        bgcolor: stringToColor(name),
-      },
-      children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`,
-    };
-}
-
 const UserBox  = styled(Box)(({ theme }) => ({ 
     display: "flex",
     alignItems: "center",
@@ -63,7 +38,15 @@ const UserBox  = styled(Box)(({ theme }) => ({
 }));
 
 const Navbar = () => {
-  const [open, setOpen] = useState(false)
+
+  const { user, dispatch } = useContext(AuthContext);
+  const PF = process.env.REACT_APP_PUBLIC_FOLDER;
+
+  const handleClick = () => {
+    logoutCall(
+      dispatch
+    );
+  }
   return (
     <AppBar position="sticky" sx={{ background: "#7e57c2"}}>
         <StyledToolbar>
@@ -76,30 +59,22 @@ const Navbar = () => {
             <Badge badgeContent={2} color="error" ml={10}>
                 <Notifications />
             </Badge>
-            <Avatar sx={{width: 30, height:30, }} {...stringAvatar('Nurdila Farha')} 
-              onClick={(e) => setOpen(true)}
-            />
+            <Link to ={`/profile/${user.username}`}>
+              <img 
+              src={
+                user.profilePicture
+                ? PF+user.profilePicture
+                : PF + "noprofile2.jpeg"
+              } 
+              alt="" 
+              className="navbarImg"
+              />
+            </Link>
+            <span className="navbarLink" onClick={handleClick}>Sign Out</span>
         </Icons>
         </StyledToolbar>
-        <Menu
-          id="demo-positioned-menu"
-          aria-labelledby="demo-positioned-button"
-          open={open}
-          onClose={e=>setOpen(false)}
-          anchorOrigin={{
-            vertical: 'top',
-            horizontal: 'right',
-          }}
-          transformOrigin={{
-            vertical: 'top',
-            horizontal: 'right',
-          }}
-        >
-          <MenuItem component="a" href="/halamanProfil">Profile</MenuItem>
-          <MenuItem component="a" href="/login">Logout</MenuItem>
-        </Menu>
     </AppBar>
   )
-}
+};
 
 export default Navbar

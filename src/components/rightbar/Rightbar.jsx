@@ -3,12 +3,24 @@ import { Box, Container, List, ListItem, ListItemButton, ListItemIcon, ListItemT
 import React from 'react'
 import './Rightbar.css'
 
-const Rightbar = () => {
+export default function Rightbar ({profile}) {
+
+  const HomeRightbar = () => {
+    return(
+      <>
+      </>
+    )
+  };
+
+
+  const ProfileRightbar = () =>{
+    return(
+      <></>
+    )
+  }
   return (
     <div className="rightbar">
-        
-    </div>
+        <ProfileRightbar/>
+    </div> 
   )
-}
-
-export default Rightbar
+};
